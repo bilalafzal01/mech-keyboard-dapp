@@ -15,4 +15,7 @@ npx hardhat help
 ```
 
 contract deployed to rinkeby:
-https://rinkeby.etherscan.io/address/0xC9eBc9251529b2490FCF175186204CB44dC6C593
+https://rinkeby.etherscan.io/address/0x44e175613a1B84a0bbb7C315D5d1330ADBE06C63
+
+dApp deployed to vercel:
+https://mech-keyboard-dapp.vercel.app/

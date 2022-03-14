@@ -1,30 +1,20 @@
 async function main() {
+  const provider = hre.ethers.getDefaultProvider()
   const [owner, somebodyElse] = await hre.ethers.getSigners()
-  const keyboardContractFactory = await hre.ethers.getContractFactory(
+  const keyboardsContractFactory = await hre.ethers.getContractFactory(
     'Keyboards'
   )
-  const keyboardsContract = await keyboardContractFactory.deploy()
+  const keyboardsContract = await keyboardsContractFactory.deploy()
   await keyboardsContract.deployed()
-  console.log(`Deployed at ${keyboardsContract.address}`)
 
-  let keyboards = await keyboardsContract.getKeyboards()
-  console.log('We got the keyboards!', keyboards)
+  const keyboardTxn = await keyboardsContract.create(0, true, 'sepia')
+  await keyboardTxn.wait()
 
-  const keyboardTxn1 = await keyboardsContract.create(
-    'A really great keyboard!'
-  )
-  await keyboardTxn1.wait()
-
-  const keyboardTx2 = await keyboardsContract
+  const tipTxn = await keyboardsContract
     .connect(somebodyElse)
-    .create('An even better keyboard!')
-  await keyboardTx2.wait()
-
-  keyboards = await keyboardsContract.getKeyboards()
-  console.log('We got the keyboards!', keyboards)
-
-  keyboards = await keyboardsContract.connect(somebodyElse).getKeyboards()
-  console.log('And as somebody else!', keyboards)
+    .tip(0, { value: hre.ethers.utils.parseEther('1') })
+  const tipTxnReceipt = await tipTxn.wait()
+  console.log(tipTxnReceipt.events)
 }
 
 main()
